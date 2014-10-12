@@ -8,15 +8,16 @@
  * pTimeSapling  = tiempo de muestreo en ms
  * cntSamples   = cantidad de muestras
  */
-double* binarySampling( int pTimeSapling, int pCntSamples){
-    double  samples[pCntSamples];
+void binarySampling( int pTimeSapling, double pSamples[], int pCntSamples ){
+    printf( "--- binarySampling ---\n");
+    printf( "[ ");
     int i = 0;
     srand( (unsigned)time( NULL ) );
-    for( i = 0; i < pCntSamples; ++i){
-        samples[i] = (double)(rand()%2);
-        printf( "samples[%d] = %f\n", i, samples[i]);
+    for( i = 0; i < pCntSamples; i++){
+        pSamples[i] = (double)(rand()%2);
+        printf( "%.1lf  ", i, pSamples[i]);
     }
-    return samples;
+    printf( "]\n");
 }
 
 
@@ -26,29 +27,46 @@ double* binarySampling( int pTimeSapling, int pCntSamples){
  * pFrecuency    = frecuencia en Hz
  */
 double* sinusoidalSampling( int pTimeSapling, int pCntSamples, int pFrecuency){
+    printf( "--- sinusoidalSampling ---\n");
+    printf( "[ ");
     double  samples[pCntSamples];
     int i = 0;
     srand( (unsigned)time( NULL ) );
     for( i = 0; i < pCntSamples; ++i){
         samples[i] = sin(2*PI*pFrecuency*pTimeSapling/1000);
-        printf( "samples[%d] = %f\n", i, samples[i]);
+        printf( "%.1lf  ", i, samples[i]);
     }
+    printf( "]\n");
     return samples;
 }
 
 
 
-double* inversion(double* pSamples)
-{
-    // TODO
-    return pSamples;
+void reverse(double pSamples[], double samplesReversed[], int pCntSamples){
+    printf( "--- reverse ---\n");
+    printf( "[ ");
+    int i = 0;
+    for( i = 0; i < pCntSamples; i++){
+        samplesReversed[i] = pSamples[pCntSamples-(i+1)];
+        printf( "%.1lf  ", i, samplesReversed[i]);
+    }
+    printf( "]\n");
 }
 
 
-double* desplazamiento(double* pSamples, int pDistance)
-{
-    // TODO
-    return pSamples;
+void shiftRight(double pSamples[], double samplesShifted[], int pDistance, int pCntSamples){
+    printf( "--- shiftRight ---\n");
+    printf( "[ ");
+    int i = 0;
+    for( i = 0; i < pDistance; i++){
+        samplesShifted[i] = 0;
+        printf( "%.1lf  ", i, samplesShifted[i]);
+    }
+    for( ; i < pCntSamples; i++){
+        samplesShifted[i] = pSamples[i-pDistance];
+        printf( "%.1lf  ", i, samplesShifted[i]);
+    }
+    printf( "]\n");
 }
 
 
@@ -59,8 +77,16 @@ void displayPlot(double* pSamples, double* pProcessedSamples, int pTimeSapling, 
 
 
 
-int main(void)
-{
-    binarySampling(20, 10);
+int main(void){
+    int cntSamples  = 10;
+    int timeSapling = 20; //milisec
+    double samples[cntSamples];
+    double samplesReversed[cntSamples];
+    double samplesShifted[cntSamples];
+
+    binarySampling(timeSapling, samples, cntSamples);
+    reverse(samples, samplesReversed, cntSamples);
+    shiftRight(samplesReversed, samplesShifted, 3, cntSamples);
+
     return 0;
 }

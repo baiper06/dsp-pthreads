@@ -1,0 +1,25 @@
+- Biblioteca para gnu plot c++
+
+https://gitorious.org/gnuplot-iostream/pages/BasicUsage#toc_3
+
+- Instrucciones:
+
+-- Instalar gnuplot
+
+sudo apt-get install gnuplot
+
+-- Para compilar hay que tener instalado Boost. Instalacion en ubuntu:
+
+sudo apt-get install libboost-all-dev
+
+-- Clonar iostream:
+
+git clone git://gitorious.org/gnuplot-iostream/gnuplot-iostream.git
+
+-- Compilar ejemplos
+
+cd gnuplot-iostream
+make
+./example-data-1d
+
+

@@ -1,0 +1,41 @@
+- Para graficar puntos:
+
+http://www.gnuplotting.org/plotting-single-points/
+http://lowrank.net/gnuplot/datafile2-e.html
+
+- Comandos
+
+#para el titulo DE LA VENTANA
+
+set term wxt title 'my title'
+
+#para el titulo DEL GRAFICO
+
+set title "Force-Deflection Data" 
+
+
+#debe crearse un archivo .dat como el que se encuentra en la misma carpeta de este archivo
+#para dibujar ese archivopl
+
+plot "test.dat" using 1:2 with points
+
+
+
+========== EJEMPLO DE COMANDOS ===============
+
+Create a title:                  > set title "Force-Deflection Data" 
+Put a label on the x-axis:       > set xlabel "Deflection (meters)"
+Put a label on the y-axis:       > set ylabel "Force (kN)"
+Change the x-axis range:         > set xrange [0.001:0.005]
+Change the y-axis range:         > set yrange [20:500]
+Have Gnuplot determine ranges:   > set autoscale
+Move the key:                    > set key 0.01,100
+Delete the key:                  > unset key
+Put a label on the plot:         > set label "yield point" at 0.003, 260 
+Remove all labels:               > unset label
+Plot using log-axes:             > set logscale
+Plot using log-axes on y-axis:   > unset logscale; set logscale y 
+Change the tic-marks:            > set xtics (0.002,0.004,0.006,0.008)
+Return to the default tics:      > unset xtics; set xtics auto
+
+

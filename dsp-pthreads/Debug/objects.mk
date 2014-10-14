@@ -4,5 +4,5 @@
 
 USER_OBJS :=
 
-LIBS :=
+LIBS := -lboost_iostreams -lboost_system-mt -lboost_system -lboost_filesystem
 

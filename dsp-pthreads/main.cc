@@ -3,9 +3,9 @@
 
 int main(void){
 
-	int timeSapling = 20; //milisec
-	int frecuency 	= 10; //Hz (NULL para usar randomSample()
-	int distance 	= 3;
+	int timeSapling = 50; 	//milisec
+	int frecuency 	= 10; 	//Hz (si es 0 se usa randomSample())
+	int distance 	= 3;	//distancia del desplazamiento
 
 	struct Samples samples;
 
@@ -15,3 +15,5 @@ int main(void){
 
 	return 0;
 }
+
+

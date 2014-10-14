@@ -11,6 +11,9 @@
 #include <stdlib.h> /* srand, rand */
 #include <iostream>
 #include <time.h>
+#include <stdint.h>
+#include <sys/time.h>
+#include <sys/resource.h>
 #include "gnuplot.h"
 #include "stages.h"
 
@@ -25,41 +28,33 @@ void printArray( double array[] ){
 }
 
 /*
+ * pSaplesGroup  = estructura de muestras
  * pTimeSapling  = tiempo de muestreo en ms
- * cntSamples   = cantidad de muestras
+ * pFrecuency    = frecuencia en Hz, si es 0 se ejecuta randomSample()
  */
-void randomSample( int pTimeSapling, struct Samples* pSaplesGroup ){
+void sample( struct Samples* pSaplesGroup, int pTimeSapling, int pFrecuency ){
 	int time 	= 0;
+	struct timespec ts;
+	ts.tv_sec = pTimeSapling/1000;				// sec = ms/1000
+	ts.tv_nsec = (pTimeSapling%1000)*1000000;	//nsec = ms*1000000
 
-	printf( "--- binarySampling ---\n");
-	//srand( time( 0 ) );
-	int i = 0;
+	printf( "--- sample ---\n");
+
+	int i;
 	for( i = 0; i < CNT_SAMPLES; i++){
-		//pSaplesGroup->samplesRaw[i] = (double)(rand()%2);
-		pSaplesGroup->samplesRaw[i] = (double)(i);
+		if( pFrecuency==0 ){
+			//randomSample
+			pSaplesGroup->samplesRaw[i] = (double)(rand()%2);
+		}else{
+			//sinusoidalSample
+			pSaplesGroup->samplesRaw[i] = sin(2*PI*pFrecuency*time/1000);
+		}
+		nanosleep(&ts, NULL);
 		pSaplesGroup->timesSapling[i] = time;
 		time += pTimeSapling;
 	}
 	pSaplesGroup->processed = false;
-}
-
-
-/*
- * pTimeSapling  = tiempo de muestreo en ms
- * pCntSamples   = cantidad de muestras
- * pFrecuency    = frecuencia en Hz
- */
-void sinusoidalSample( int pTimeSapling, struct Samples* pSaplesGroup, int pFrecuency){
-	int time 	= 0;
-
-	printf( "--- sinusoidalSampling ---\n");
-	int i = 0;
-	for( i = 0; i < CNT_SAMPLES; i++){
-		pSaplesGroup->samplesRaw[i] = sin(2*PI*pFrecuency*time/1000);
-		pSaplesGroup->timesSapling[i] = time;
-		time += pTimeSapling;
-	}
-	pSaplesGroup->processed = false;
+	//printArray( pSaplesGroup->samplesRaw );
 }
 
 
@@ -94,28 +89,14 @@ void shiftRight(struct Samples* pSaplesGroup, int pDistance){
 }
 
 /*
- * pSaplesGroup  = estructura de muestras
- * pTimeSapling  = tiempo de muestreo en ms
- * pFrecuency    = frecuencia en Hz, si es NULL se ejecuta randomSample()
- */
-void sample( struct Samples* pSaplesGroup, int pTimeSapling, int pFrecuency ){
-	if( pFrecuency==NULL ){
-		randomSample( pTimeSapling, pSaplesGroup);
-	}else{
-		sinusoidalSample( pTimeSapling, pSaplesGroup, pFrecuency);
-	}
-	printArray( pSaplesGroup->samplesRaw );
-}
-
-/*
  * pSaplesGroup = estructura de muestras
  * pDistance  	= distancia del desplazamiento
  */
 void process(struct Samples* pSaplesGroup, int pDistance){
 	reverse( pSaplesGroup);
-	printArray( pSaplesGroup->samplesProcessed );
+	//printArray( pSaplesGroup->samplesProcessed );
 	shiftRight( pSaplesGroup, pDistance );
-	printArray( pSaplesGroup->samplesProcessed );
+	//printArray( pSaplesGroup->samplesProcessed );
 	pSaplesGroup->processed = true;
 }
 

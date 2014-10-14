@@ -11,6 +11,9 @@
 #include <unistd.h>
 #include "gnuplot-iostream.h"
 
+/** Tamano para los nombres de los archivos */
+#define SPRINTF_BUFFER_SIZE 50
+
 /** Estructura necesaria para revisar la existencia de un folder - mkdir */
 struct stat st = {0};
 
@@ -34,12 +37,16 @@ int guardarArchivoDat(int *xAxis, int *yAxis, int capacity,  char* tituloGrafico
 		mkdir(folder, 0700);
 	}
 
-	/** Primero crea el nombre del grafico correspondiente */
+	/** Primero crea el nombre del grafico correspondiente - SIN Extension */
 	int charSize;
-	charSize = sprintf (filePath, "%s/muestreo%d%s.dat",folder, numeroMuestreo, tituloGrafico);
+	charSize = sprintf (filePath, "%s/muestreo%d%s",folder, numeroMuestreo, tituloGrafico);
+
+	/** Ahora agrega la extension .dat */
+	char filePathAndExtension[SPRINTF_BUFFER_SIZE];
+	sprintf (filePathAndExtension, "%s.dat",filePath);
 
 	/** Crea el archivo a utilizar por gnuplot con el formato x \t y */
-	FILE *f = fopen(filePath, "w");
+	FILE *f = fopen(filePathAndExtension, "w");
 	if (f == NULL)
 	{
 		printf("Error opening file!\n");
@@ -68,15 +75,17 @@ int guardarArchivoDat(int *xAxis, int *yAxis, int capacity,  char* tituloGrafico
  * @param numeroMuestreo numero de este muestreo. se incluye en el nombre del archivo
  * @param filePath valor de salida. De la forma:
  *
- * 		folder_default/(muestreo + numeroMuestreo + tituloGrafico).dat
+ * 		folder_default/(muestreo + numeroMuestreo + tituloGrafico) **NOTA: no trae extension
+ *
+ * @param guardarEnImagen indica si la imagen se debe guardar en una imagen. Esto hace que no se muestre el grafico en pantalla
  *
  * Por ejemplo, para hacer varios graficos para el mismo muestreo, se mantiene el numeroMuestreo y se cambia el tituloGrafico.
  * Si cambia el muestreo , cambie el numero de muestreo
  */
-void mostrarGrafico(int *xAxis, int *yAxis, int capacity, char* tituloGrafico, int numeroMuestreo)
+void mostrarGrafico(int *xAxis, int *yAxis, int capacity, char* tituloGrafico, int numeroMuestreo, bool guardarEnImagen)
 {
-	/** Nombre del archivo con los datos creado */
-	char filePath [50];
+	/** Nombre del archivo con los datos creado. SIN Extension */
+	char filePath [SPRINTF_BUFFER_SIZE];
 	int filePathSize;
 
 	/** Crea el archivo con la informacion para gnuplot */
@@ -93,9 +102,16 @@ void mostrarGrafico(int *xAxis, int *yAxis, int capacity, char* tituloGrafico, i
 	gp << "set xlabel \"titulo eje x\" " << std::endl;
 	gp << "set ylabel \"titulo eje y\" " << std::endl;
 
+	if(guardarEnImagen)
+	{
+		/** Para guardar en png */
+		gp << "set terminal png size 1024,512 enhanced font \"Helvetica,20\"" << std::endl;
+		gp << "set output \"" << filePath << ".png\"" << std::endl;
+	}
+
 	/** Pinta el grafico */
-	gp << "plot \"" << filePath << "\" using 1:2 with points" << std::endl;
-	printf ("[%s] is a string %d chars long\n",filePath, filePathSize);
+	gp << "plot \"" << filePath << ".dat\" " << "with points" << std::endl;
+
 }
 
 int main() {
@@ -111,6 +127,6 @@ int main() {
 		xAxis[pos] = pos;
 		yAxis[pos] = pos*3;
 	}
-	mostrarGrafico(xAxis, yAxis, arraySize, "Normal", numero_muestreo);
+	mostrarGrafico(xAxis, yAxis, arraySize, "normal", numero_muestreo, true);
 	return 0;
 }

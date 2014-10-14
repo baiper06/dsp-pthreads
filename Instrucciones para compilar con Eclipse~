@@ -1,0 +1,16 @@
+
+======== Para compilar con eclipse ===========
+
+1. Click derecho en el proyecto
+2. C/C+ Buils -> Settings
+3. GCC compiler -> Include paths -> Agregar /mi-ruta-al-repo/gnuplot-iostream
+3. G++ compiler -> Include paths -> Agregar /mi-ruta-al-repo/gnuplot-iostream
+4. Cross G++ Linker -> Libraries y agregar en Libraries (-l):
+
+boost_iostreams
+boost_system-mt
+boost_system
+boost_filesystem
+
+5. Build Project
+

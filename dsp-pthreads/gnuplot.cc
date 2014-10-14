@@ -26,7 +26,7 @@ struct stat st = {0};
  * @param filePath valor de salida. contiene la ruta + nombre con que se guardo el archivo relativo a la ubicacion del proyecto.
  * @return el largo de filePath o -1 en caso de error
  */
-int guardarArchivoDat(int *xAxis, int *yAxis, int capacity,  char* tituloGrafico, int numeroMuestreo, char* filePath)
+int guardarArchivoDat(int *xAxis, double *yAxis, int capacity,  char* tituloGrafico, int numeroMuestreo, char* filePath)
 {
 	/** Revisa se existe el folder de los muestreos, si no, se crea */
 	char* folder = "muestreos";
@@ -53,7 +53,7 @@ int guardarArchivoDat(int *xAxis, int *yAxis, int capacity,  char* tituloGrafico
 	int pos = 0;
 	for(pos = 0; pos < capacity; pos++)
 	{
-		fprintf(f, "%d\t%d\n", xAxis[pos], yAxis[pos]);
+		fprintf(f, "%d\t%%.1lf\n", xAxis[pos], yAxis[pos]);
 	}
 
 	fclose(f);
@@ -80,7 +80,7 @@ int guardarArchivoDat(int *xAxis, int *yAxis, int capacity,  char* tituloGrafico
  * Por ejemplo, para hacer varios graficos para el mismo muestreo, se mantiene el numeroMuestreo y se cambia el tituloGrafico.
  * Si cambia el muestreo , cambie el numero de muestreo
  */
-void mostrarGrafico(int *xAxis, int *yAxis, int capacity, char* tituloGrafico, int numeroMuestreo, int guardarEnImagen)
+void mostrarGrafico(int *xAxis, double *yAxis, int capacity, char* tituloGrafico, int numeroMuestreo, int guardarEnImagen)
 {
 	/** Nombre del archivo con los datos creado. SIN Extension */
 	char filePath [SPRINTF_BUFFER_SIZE];

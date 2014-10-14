@@ -33,7 +33,7 @@
  * Por ejemplo, para hacer varios graficos para el mismo muestreo, se mantiene el numeroMuestreo y se cambia el tituloGrafico.
  * Si cambia el muestreo , cambie el numero de muestreo
  */
-void mostrarGrafico(int *xAxis, int *yAxis, int capacity, char* tituloGrafico, int numeroMuestreo, int guardarEnImagen);
+void mostrarGrafico(int *xAxis, double *yAxis, int capacity, char* tituloGrafico, int numeroMuestreo, int guardarEnImagen);
 
 
 #endif /* GNUPLOT_H_ */

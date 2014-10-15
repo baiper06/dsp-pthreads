@@ -97,8 +97,8 @@ void mostrarGrafico(int *xAxis, double *yAxis, int capacity, char* tituloGrafico
 
 	/** Titulos del grafico y de los ejes */
 	gp << "set title \"" << filePath << "\"" << std::endl;
-	gp << "set xlabel \"titulo eje x\" " << std::endl;
-	gp << "set ylabel \"titulo eje y\" " << std::endl;
+	gp << "set xlabel \"Tiempo (ms)\" " << std::endl;
+	gp << "set ylabel \"Tension (V)\" " << std::endl;
 
 	if(guardarEnImagen)
 	{

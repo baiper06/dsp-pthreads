@@ -33,25 +33,25 @@ void printArray( double array[] ){
  * pFrecuency    = frecuencia en Hz, si es 0 se ejecuta randomSample()
  */
 void generarMuestra( struct s_samples* pSaplesGroup, int pTimeSapling, int pFrecuency ){
-	int time 	= 0;
+
 	struct timespec ts;
 	ts.tv_sec = pTimeSapling/1000;				// sec = ms/1000
 	ts.tv_nsec = (pTimeSapling%1000)*1000000;	//nsec = ms*1000000
 
 	printf( "--- sample ---\n");
-
+	int num_muestra;
 	int i;
 	for( i = 0; i < CANT_MUESTRAS_POR_MUESTREO; i++){
+		num_muestra = pSaplesGroup->numeroMuestreo*CANT_MUESTRAS_POR_MUESTREO + i;
+		pSaplesGroup->tiempos[i] = num_muestra*pTimeSapling;
 		if( pFrecuency==0 ){
 			//randomSample
 			pSaplesGroup->muestrasNormal[i] = (double)(rand()%2);
 		}else{
 			//sinusoidalSample
-			pSaplesGroup->muestrasNormal[i] = sin(2*PI*pFrecuency*time/1000);
+			pSaplesGroup->muestrasNormal[i] = sin(2*PI*pFrecuency*pSaplesGroup->tiempos[i]/1000);
 		}
 		nanosleep(&ts, NULL);
-		pSaplesGroup->tiempos[i] = time;
-		time += pTimeSapling;
 	}
 	//pSaplesGroup->processed = false;
 	//printArray( pSaplesGroup->samplesRaw );
@@ -128,6 +128,7 @@ void plot(struct s_samples* pSaplesGroup, int pNumberSampling){
 		printf( "%d  ", pSaplesGroup->tiempos[i]);
 	}
 	printf( "]\n");
+
 	mostrarGrafico(pSaplesGroup->tiempos, pSaplesGroup->muestrasNormal, CANT_MUESTRAS_POR_MUESTREO, "original", pNumberSampling, 0);
 	mostrarGrafico(pSaplesGroup->tiempos, pSaplesGroup->muestrasProcesadas, CANT_MUESTRAS_POR_MUESTREO, "procesada", pNumberSampling, 0);
 }

@@ -9,7 +9,7 @@
 
 #define MUESTRAS_EN_COLA 50
 
-#define TIEMPO 20		//ms
+#define TIEMPO 5		//ms
 #define FRECUENCIA 10	//Hz
 #define DISTANCIA 3		//desplazamiento
 
@@ -41,6 +41,7 @@ void * empezarGeneracionMuestras(void *arg){
 	}
 
 	//Ahora comienza a llenar las structs en estado
+	int num_muestreo = 0;
 	while(s_corriendo)
 	{
 		pthread_mutex_lock(&lock);
@@ -53,6 +54,8 @@ void * empezarGeneracionMuestras(void *arg){
 			generarMuestra(paraMuestrear,TIEMPO, FRECUENCIA);
 			//Aqui hay que llenar la estructura con el muestreo
 			paraMuestrear->etapa = PROCESAMIENTO;
+			paraMuestrear->numeroMuestreo = num_muestreo;
+			num_muestreo++;
 		}
 	}
 

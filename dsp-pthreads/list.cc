@@ -47,7 +47,7 @@ s_samples* list_first_element_in_state (List* list, S_SAMPLE_ETAPA state)
 	}
 	if(found)
 		return node->item;
-	printf("ELEMENTO NO ENCONTRADO\n");
+	//printf("ELEMENTO NO ENCONTRADO\n");
 	return NULL;
 }
 

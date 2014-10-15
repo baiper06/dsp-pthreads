@@ -106,6 +106,28 @@ void procesarMuestra(struct s_samples* pSaplesGroup, int pDistance){
  */
 void plot(struct s_samples* pSaplesGroup, int pNumberSampling){
 	printf( "--- plot ---\n");
+
+	// print muestrasNormal
+	printf( "muestrasNormal [ ");
+	int i;
+	for( i = 0; i < CANT_MUESTRAS_POR_MUESTREO; i++){
+		printf( "%.2lf  ", pSaplesGroup->muestrasNormal[i]);
+	}
+	printf( "]\n");
+
+	// print muestrasNormal
+	printf( "muestrasProces [ ");
+	for( i = 0; i < CANT_MUESTRAS_POR_MUESTREO; i++){
+		printf( "%.2lf  ", pSaplesGroup->muestrasProcesadas[i]);
+	}
+	printf( "]\n");
+
+	// print muestrasNormal
+	printf( "tiempos [ ");
+	for( i = 0; i < CANT_MUESTRAS_POR_MUESTREO; i++){
+		printf( "%d  ", pSaplesGroup->tiempos[i]);
+	}
+	printf( "]\n");
 	mostrarGrafico(pSaplesGroup->tiempos, pSaplesGroup->muestrasNormal, CANT_MUESTRAS_POR_MUESTREO, "original", pNumberSampling, 0);
 	mostrarGrafico(pSaplesGroup->tiempos, pSaplesGroup->muestrasProcesadas, CANT_MUESTRAS_POR_MUESTREO, "procesada", pNumberSampling, 0);
 }

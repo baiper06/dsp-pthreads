@@ -53,7 +53,7 @@ int guardarArchivoDat(int *xAxis, double *yAxis, int capacity,  char* tituloGraf
 	int pos = 0;
 	for(pos = 0; pos < capacity; pos++)
 	{
-		fprintf(f, "%d\t%%.1lf\n", xAxis[pos], yAxis[pos]);
+		fprintf(f, "%d\t%.1lf\n", xAxis[pos], yAxis[pos]);
 	}
 
 	fclose(f);

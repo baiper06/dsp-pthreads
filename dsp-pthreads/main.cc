@@ -9,9 +9,9 @@
 
 #define MUESTRAS_EN_COLA 50
 
-#define TIEMPO 50
-#define FRECUENCIA 10
-#define DISTANCIA 3
+#define TIEMPO 20		//ms
+#define FRECUENCIA 10	//Hz
+#define DISTANCIA 3		//desplazamiento
 
 //Cola de estructuras con las muestras
 List listaMuestreos;
@@ -47,7 +47,7 @@ void * empezarGeneracionMuestras(void *arg){
 		s_samples* paraMuestrear = list_first_element_in_state(&listaMuestreos, MUESTREO);
 		pthread_mutex_unlock(&lock);
 
-		printf("PARA MUESTREO\n");
+		//printf("PARA MUESTREO\n");
 
 		if(paraMuestrear != NULL) {
 			generarMuestra(paraMuestrear,TIEMPO, FRECUENCIA);
@@ -69,7 +69,7 @@ void * empezarProcesamientoDeMuestras(void *arg) {
 		s_samples* paraProcesar = list_first_element_in_state(&listaMuestreos, PROCESAMIENTO);
 		pthread_mutex_unlock(&lock);
 
-		printf("PARA PROCESAR\n");
+		//printf("PARA PROCESAR\n");
 		if(paraProcesar != NULL) {
 			procesarMuestra(paraProcesar, DISTANCIA);
 			//Aqui hay que realizar el procesamiento sobre la muestra
@@ -89,7 +89,7 @@ void * empezarDibujarMuestras(void *arg) {
 		s_samples* paraProcesar = list_first_element_in_state(&listaMuestreos, PLOT);
 		pthread_mutex_unlock(&lock);
 
-		printf("PARA PLOTTEAR\n");
+		//printf("PARA PLOTTEAR\n");
 		if(paraProcesar != NULL) {
 			plot(paraProcesar,paraProcesar->numeroMuestreo);
 			//Aqui hay que dibujar los graficos

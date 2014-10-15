@@ -1,0 +1,75 @@
+#include <pthread.h>
+#include "stages.h"
+#include "queue.h"
+
+void * createSampleArray(void *arg){
+	//cast
+	Queue *queue = (Queue*)arg;
+
+	//se crean 10 arreglos de mestras
+	for (int index = 0; index < 10; index) {
+		int timeSapling = 50; 	//milisec
+		int frecuency 	= 10; 	//Hz (si es 0 se usa randomSample())
+
+		struct Samples samples;
+
+		sample( &samples, timeSapling, frecuency );
+
+		//se incluye el arreglo en la cola
+		queue->push(queue, Samples);
+	}
+}
+
+void * proccesArray(void *arg) {
+	//cast
+	Queue *queue = (Queue*)arg;
+
+	Samples *item = queue->peek(queue);
+	int distance 	= 3;	//distancia del desplazamiento
+
+	process( item, distance );
+}
+
+void * plotArray(void *arg) {
+	//cast
+	Queue *queue = (Queue*)arg;
+
+	//cast
+	Samples *item = queue->pop(queue);
+	plot( item, 0 );
+}
+
+int main(void){
+
+	//Se crea la pila
+	Queue queue = createQueue();
+
+	//Hilos
+	 pthread_t samp_t, proc_t, plot_t;
+
+	 //creacion de los hilos
+	 pthread_create(&samp_t, NULL, createSampleArray,&queue);
+
+
+
+
+
+
+
+
+
+
+	int timeSapling = 50; 	//milisec
+	int frecuency 	= 10; 	//Hz (si es 0 se usa randomSample())
+	int distance 	= 3;	//distancia del desplazamiento
+
+	struct Samples samples;
+
+	sample( &samples, timeSapling, frecuency );
+	process( &samples, distance );
+	plot( &samples, 0 );
+
+	return 0;
+}
+
+

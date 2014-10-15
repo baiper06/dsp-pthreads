@@ -1,0 +1,35 @@
+#include <pthread.h>
+#include "stages.h"
+#include "queue.h"
+
+int main(void){
+
+	//Hilos
+	 pthread_t samp_t, proc_t, plot_t;
+
+	 //creacion de los hilos
+
+
+
+
+
+
+
+
+
+
+
+	int timeSapling = 50; 	//milisec
+	int frecuency 	= 10; 	//Hz (si es 0 se usa randomSample())
+	int distance 	= 3;	//distancia del desplazamiento
+
+	struct Samples samples;
+
+	sample( &samples, timeSapling, frecuency );
+	process( &samples, distance );
+	plot( &samples, 0 );
+
+	return 0;
+}
+
+

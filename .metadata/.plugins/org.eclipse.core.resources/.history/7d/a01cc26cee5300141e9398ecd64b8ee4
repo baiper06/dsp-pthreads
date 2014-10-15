@@ -1,0 +1,55 @@
+/*
+ * queue.cc
+ *
+ *  Created on: 14/10/2014
+ *      Author: luis
+ */
+
+#include <cstddef>
+#include <cstdlib>
+#include "list.h"
+
+
+void add(List* list, s_samples* item)
+{
+	// Create a new node
+	Node* n = (Node*) malloc (sizeof(Node));
+	n->item = item;
+	n->next = NULL;
+
+	if (queue->head == NULL) { // no head
+		queue->head = n;
+	} else{
+		queue->tail->next = n;
+	}
+	queue->tail = n;
+	queue->size++;
+}
+
+Samples* pop (Queue* queue) {
+	// get the first item
+	Node* head = queue->head;
+	Samples *item = head->item;
+	// move head pointer to next node, decrease size
+	queue->head = head->next;
+	queue->size--;
+	// free the memory of original head
+	free(head);
+	return item;
+}
+
+Samples* peek (Queue* queue) {
+	Node* head = queue->head;
+	return head->item;
+}
+
+Queue createQueue () {
+	Queue queue;
+	queue.size = 0;
+	queue.head = NULL;
+	queue.tail = NULL;
+	queue.push = &push;
+	queue.pop = &pop;
+	queue.peek = &peek;
+	return queue;
+}

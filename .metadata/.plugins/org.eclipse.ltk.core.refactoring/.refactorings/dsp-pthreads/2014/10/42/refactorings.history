@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">&#x0A;<refactoring comment="Rename resource &apos;dsp-pthreads/queue.h&apos; to &apos;list.h&apos;" description="Rename resource &apos;queue.h&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="queue.h" name="list.h" stamp="1413324252027" updateReferences="true"/>&#x0A;<refactoring comment="Rename resource &apos;dsp-pthreads/queue.cc&apos; to &apos;list.cc&apos;" description="Rename resource &apos;queue.cc&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="queue.cc" name="list.cc" stamp="1413324361772" updateReferences="true"/>
+</session>

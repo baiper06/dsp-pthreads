@@ -1,0 +1,6 @@
+20:16:33 **** Incremental Build of configuration Debug for project dsp-pthreads ****
+make all 
+make: No se hace nada para «all».
+
+20:16:33 Build Finished (took 61ms)
+

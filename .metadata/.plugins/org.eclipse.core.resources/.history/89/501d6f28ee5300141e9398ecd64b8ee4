@@ -1,0 +1,44 @@
+/*
+ * queue.h
+ *
+ *  Created on: 14/10/2014
+ *      Author: luis
+ */
+
+#ifndef LIST_H_
+#define LIST_H_
+
+//#include "stages.h"
+#include "samples.h"
+
+typedef struct Node {
+    struct s_samples* item;
+    struct Node* next;
+} Node;
+
+typedef struct List {
+
+	Node* head;
+    Node* tail;
+    int size;
+
+    // add item to tail
+    void (*add) (struct List*, struct s_samples*);
+
+    // get item from head and remove it from queue
+    s_samples* (*firstElementInState) (S_SAMPLE_ETAPA);
+
+} Queue;
+
+//Metodos internos de la lista
+void add(List* list, s_samples* item);
+s_samples* firstElementInState (S_SAMPLE_ETAPA state);
+
+//Metodos externos de la lista
+List createListWithCapacity(int capacity).
+//
+//
+//s_samples* peek (Queue* queue);
+//Queue createQueue ();
+
+#endif /* LIST_H_ */

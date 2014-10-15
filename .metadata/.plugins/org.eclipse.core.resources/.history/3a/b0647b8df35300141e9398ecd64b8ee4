@@ -1,0 +1,114 @@
+#include <pthread.h>
+#include <cstddef>
+#include <cstdlib>
+#include <stdio.h>
+
+#include "list.h"
+#include "samples.h"
+#include "stages.h"
+
+#define MUESTRAS_EN_COLA 50
+
+//Cola de estructuras con las muestras
+List listaMuestreos;
+
+//Hilos y mutex para acceso a la cola
+pthread_t samp_t, proc_t, plot_t;
+pthread_mutex_t lock;
+
+//Variable que infica que se esta en ejecucion
+int s_corriendo = 1;
+
+void * empezarGeneracionMuestras(void *arg){
+
+	//Crea la lista de muestreos
+	listaMuestreos = create_list_with_capacity(MUESTRAS_EN_COLA);
+
+	//Se crean las estructuras en la cola para reutilizar
+	int index;
+	for ( index = 0; index < MUESTRAS_EN_COLA; index++) {
+
+		printf( "Created and stored the array %i\n", index);
+
+		s_samples* sample = (s_samples*) malloc (sizeof(s_samples));
+		sample->etapa = MUESTREO;
+		list_add(&listaMuestreos, sample);
+	}
+
+	//Ahora comienza a llenar las structs en estado
+	while(s_corriendo)
+	{
+		pthread_mutex_lock(&lock);
+		s_samples* paraMuestrear = list_first_element_in_state(&listaMuestreos, MUESTREO);
+		printf("PARA MUESTREO\n");
+		//Aqui hay que llenar la estructura con el muestreo
+		paraMuestrear->etapa = PROCESAMIENTO;
+		pthread_mutex_unlock(&lock);
+	}
+
+	return NULL;
+}
+
+void * empezarProcesamientoDeMuestras(void *arg) {
+
+
+	//Ahora comienza a llenar las structs en estado
+	while(s_corriendo)
+	{
+		pthread_mutex_lock(&lock);
+		s_samples* paraProcesar = list_first_element_in_state(&listaMuestreos, PROCESAMIENTO);
+		printf("PARA PROCESAR\n");
+		//Aqui hay que llenar la estructura con el muestreo
+		paraProcesar->etapa = PLOT;
+		pthread_mutex_unlock(&lock);
+	}
+
+	return NULL;
+}
+
+void * plotArray(void *arg) {
+
+	//	while(1) {
+	//		//cast
+	//		pthread_mutex_lock(&lock);
+	//		Samples *item = queue.pop(&queue);
+	//		pthread_mutex_unlock(&lock);
+	//		if (item != NULL) {
+	//			if (item->processed) {
+	//				plot( item, 0 );
+	//			}
+	//		}
+	//	}
+	return NULL;
+}
+
+int main(void){
+
+	//	//Se crea la pila
+	//	queue = createQueue();
+
+	if (pthread_mutex_init(&lock, NULL) != 0)
+	{
+		printf("\n mutex init failed\n");
+		return 1;
+	}
+
+	//creacion de los hilos
+//	pthread_create(&samp_t, NULL, empezarGeneracionMuestras, NULL);
+	pthread_create(&proc_t, NULL, empezarProcesamientoDeMuestras, NULL);
+	//	pthread_create(&plot_t, NULL, plotArray, NULL);
+
+//	pthread_join(samp_t, NULL);
+	pthread_join(proc_t, NULL);
+	//	pthread_join(plot_t, NULL);
+
+//	while (1){}
+	printf("Estamos mamando");
+	pthread_mutex_destroy(&lock);
+
+
+
+	return 0;
+}
+
+

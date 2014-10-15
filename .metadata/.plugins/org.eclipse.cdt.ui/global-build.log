@@ -1,0 +1,23 @@
+20:16:11 **** Incremental Build of configuration Debug for project dsp-pthreads ****
+make all 
+Building file: ../main.cc
+Invoking: Cross G++ Compiler
+g++ -I/home/luis/gnuplot-iostream -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"main.d" -MT"main.d" -o "main.o" "../main.cc"
+Finished building: ../main.cc
+ 
+Building file: ../stages.cc
+Invoking: Cross G++ Compiler
+g++ -I/home/luis/gnuplot-iostream -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"stages.d" -MT"stages.d" -o "stages.o" "../stages.cc"
+../stages.cc: En la función ‘void plot(s_samples*, int)’:
+../stages.cc:109:128: aviso: conversión obsoleta de una constante de cadena a ‘char*’ [-Wwrite-strings]
+../stages.cc:110:133: aviso: conversión obsoleta de una constante de cadena a ‘char*’ [-Wwrite-strings]
+Finished building: ../stages.cc
+ 
+Building target: dsp-pthreads
+Invoking: Cross G++ Linker
+g++  -o "dsp-pthreads"  ./gnuplot.o ./list.o ./main.o ./stages.o   -lboost_iostreams -lboost_system-mt -lboost_system -lboost_filesystem
+Finished building target: dsp-pthreads
+ 
+20:16:33 **** Incremental Build of configuration Debug for project dsp-pthreads ****
+make all 
+make: No se hace nada para «all».

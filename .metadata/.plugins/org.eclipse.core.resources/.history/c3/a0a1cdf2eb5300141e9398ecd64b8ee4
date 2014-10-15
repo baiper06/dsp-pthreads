@@ -1,0 +1,21 @@
+/*
+ * samples.h
+ *
+ *  Created on: 14/10/2014
+ *      Author: luis
+ */
+
+#ifndef SAMPLES_H_
+#define SAMPLES_H_
+
+#define CNT_SAMPLES 10
+
+struct s_samples {
+
+	double samplesRaw[CNT_SAMPLES];
+	double samplesProcessed[CNT_SAMPLES];
+	int timesSapling[CNT_SAMPLES];
+	bool processed;
+};
+
+#endif /* SAMPLES_H_ */

@@ -21,7 +21,7 @@
 void printArray( double array[] ){
 	printf( "[ ");
 	int i = 0;
-	for( i = 0; i < CNT_SAMPLES; i++){
+	for( i = 0; i < CANT_MUESTRAS_POR_MUESTREO; i++){
 		printf( "%.2lf  ", array[i]);
 	}
 	printf( "]\n");
@@ -32,7 +32,7 @@ void printArray( double array[] ){
  * pTimeSapling  = tiempo de muestreo en ms
  * pFrecuency    = frecuencia en Hz, si es 0 se ejecuta randomSample()
  */
-void sample( struct Samples* pSaplesGroup, int pTimeSapling, int pFrecuency ){
+void generarMuestra( struct s_samples* pSaplesGroup, int pTimeSapling, int pFrecuency ){
 	int time 	= 0;
 	struct timespec ts;
 	ts.tv_sec = pTimeSapling/1000;				// sec = ms/1000
@@ -41,19 +41,19 @@ void sample( struct Samples* pSaplesGroup, int pTimeSapling, int pFrecuency ){
 	printf( "--- sample ---\n");
 
 	int i;
-	for( i = 0; i < CNT_SAMPLES; i++){
+	for( i = 0; i < CANT_MUESTRAS_POR_MUESTREO; i++){
 		if( pFrecuency==0 ){
 			//randomSample
-			pSaplesGroup->samplesRaw[i] = (double)(rand()%2);
+			pSaplesGroup->muestrasNormal[i] = (double)(rand()%2);
 		}else{
 			//sinusoidalSample
-			pSaplesGroup->samplesRaw[i] = sin(2*PI*pFrecuency*time/1000);
+			pSaplesGroup->muestrasNormal[i] = sin(2*PI*pFrecuency*time/1000);
 		}
 		nanosleep(&ts, NULL);
-		pSaplesGroup->timesSapling[i] = time;
+		pSaplesGroup->tiempos[i] = time;
 		time += pTimeSapling;
 	}
-	pSaplesGroup->processed = false;
+	//pSaplesGroup->processed = false;
 	//printArray( pSaplesGroup->samplesRaw );
 }
 
@@ -61,11 +61,11 @@ void sample( struct Samples* pSaplesGroup, int pTimeSapling, int pFrecuency ){
 /*
  * pSaplesGroup = estructura de muestras
  */
-void reverse(struct Samples* pSaplesGroup){
+void reverse(struct s_samples* pSaplesGroup){
 	printf( "--- reverse ---\n");
 	int i = 0;
-	for( i = 0; i < CNT_SAMPLES; i++){
-		pSaplesGroup->samplesProcessed[i] = pSaplesGroup->samplesRaw[CNT_SAMPLES-(i+1)];
+	for( i = 0; i < CANT_MUESTRAS_POR_MUESTREO; i++){
+		pSaplesGroup->muestrasProcesadas[i] = pSaplesGroup->muestrasNormal[CANT_MUESTRAS_POR_MUESTREO-(i+1)];
 	}
 }
 
@@ -73,18 +73,18 @@ void reverse(struct Samples* pSaplesGroup){
  * pSaplesGroup = estructura de muestras
  * pDistance  	= distancia del desplazamiento
  */
-void shiftRight(struct Samples* pSaplesGroup, int pDistance){
+void shiftRight(struct s_samples* pSaplesGroup, int pDistance){
 	printf( "--- shiftRight ---\n");
-	double samplesShifted[CNT_SAMPLES];
+	double samplesShifted[CANT_MUESTRAS_POR_MUESTREO];
 	int i = 0;
 	for( i = 0; i < pDistance; i++){
 		samplesShifted[i] = 0;
 	}
-	for( ; i < CNT_SAMPLES; i++){
-		samplesShifted[i] = pSaplesGroup->samplesProcessed[i-pDistance];
+	for( ; i < CANT_MUESTRAS_POR_MUESTREO; i++){
+		samplesShifted[i] = pSaplesGroup->muestrasProcesadas[i-pDistance];
 	}
-	for( i = 0; i < CNT_SAMPLES; i++){
-		pSaplesGroup->samplesProcessed[i] = samplesShifted[i];
+	for( i = 0; i < CANT_MUESTRAS_POR_MUESTREO; i++){
+		pSaplesGroup->muestrasProcesadas[i] = samplesShifted[i];
 	}
 }
 
@@ -92,22 +92,22 @@ void shiftRight(struct Samples* pSaplesGroup, int pDistance){
  * pSaplesGroup = estructura de muestras
  * pDistance  	= distancia del desplazamiento
  */
-void process(struct Samples* pSaplesGroup, int pDistance){
+void procesarMuestra(struct s_samples* pSaplesGroup, int pDistance){
 	reverse( pSaplesGroup);
 	//printArray( pSaplesGroup->samplesProcessed );
 	shiftRight( pSaplesGroup, pDistance );
 	//printArray( pSaplesGroup->samplesProcessed );
-	pSaplesGroup->processed = true;
+	//pSaplesGroup->processed = true;
 }
 
 /*
  * pSaplesGroup 	= estructura de muestras
  * pNumberSampling 	= numero de la estructura de muestras
  */
-void plot(struct Samples* pSaplesGroup, int pNumberSampling){
+void plot(struct s_samples* pSaplesGroup, int pNumberSampling){
 	printf( "--- plot ---\n");
-	mostrarGrafico(pSaplesGroup->timesSapling, pSaplesGroup->samplesRaw, CNT_SAMPLES, "original", pNumberSampling, 0);
-	mostrarGrafico(pSaplesGroup->timesSapling, pSaplesGroup->samplesProcessed, CNT_SAMPLES, "procesada", pNumberSampling, 0);
+	mostrarGrafico(pSaplesGroup->tiempos, pSaplesGroup->muestrasNormal, CANT_MUESTRAS_POR_MUESTREO, "original", pNumberSampling, 0);
+	mostrarGrafico(pSaplesGroup->tiempos, pSaplesGroup->muestrasProcesadas, CANT_MUESTRAS_POR_MUESTREO, "procesada", pNumberSampling, 0);
 }
 
 

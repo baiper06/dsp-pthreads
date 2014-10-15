@@ -1,0 +1,21 @@
+/*
+ * stages.h
+ *
+ *  Created on: 13/10/2014
+ *      Author: bairon
+ */
+
+#ifndef STAGES_H_
+#define STAGES_H_
+
+#include "samples.h"
+
+#define PI 3.14159265
+
+void printArray( double array[] );
+
+void sample( struct Samples* pSaplesGroup, int pTimeSapling, int pFrecuency);
+void process(struct Samples* pSaplesGroup, int pDistance);
+void plot(struct Samples* pSaplesGroup, int pNumberSampling);
+
+#endif /* STAGES_H_ */
